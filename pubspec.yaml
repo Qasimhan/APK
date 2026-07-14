@@ -1,0 +1,58 @@
+name: pos_mobile
+description: Mobile POS companion app (onboarding, checkout, inventory, settings)
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Navigation
+  go_router: ^14.2.0
+  # Image picking (for product images)
+  image_picker: ^1.1.2
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # Local database (mirrors desktop schema)
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.3
+  path: ^1.9.0
+
+  # Networking (REST to PC local server + WebSocket sync)
+  dio: ^5.5.0
+  web_socket_channel: ^2.4.5
+
+  # LAN discovery of the paired PC (mDNS)
+  multicast_dns: ^0.3.2+6
+
+  # Barcode / QR scanning (pairing QR + product barcodes)
+  mobile_scanner: ^7.2.0
+
+  # Secure storage for device token / pairing secrets
+  flutter_secure_storage: ^9.2.2
+  crypto: ^3.0.7
+  shared_preferences: ^2.1.1
+
+  cupertino_icons: ^1.0.8
+  uuid: ^4.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  drift_dev: ^2.18.0
+  build_runner: ^2.4.11
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"  
+
+flutter:
+  uses-material-design: true
