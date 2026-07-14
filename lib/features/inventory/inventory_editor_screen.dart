@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -9,6 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pos_mobile/data/db/database_provider.dart';
 import 'package:pos_mobile/data/db/db.dart';
 import 'package:pos_mobile/features/sync/sync_providers.dart';
+=======
+import 'package:drift/drift.dart' as drift;
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pos_mobile/data/db/database_provider.dart';
+import 'package:pos_mobile/data/db/db.dart';
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
 class InventoryEditorScreen extends ConsumerStatefulWidget {
   const InventoryEditorScreen({super.key, this.product});
@@ -22,6 +30,7 @@ class InventoryEditorScreen extends ConsumerStatefulWidget {
 
 class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
   final _formKey = GlobalKey<FormState>();
+<<<<<<< HEAD
   static const _customCategoryValue = '__custom__';
   static const List<String> _categoryOptions = [
     'General',
@@ -32,10 +41,13 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     _customCategoryValue,
   ];
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   late final TextEditingController _barcodeController;
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _priceController;
+<<<<<<< HEAD
   // NEW: matches the desktop dialog's "Cost" field. The local Product
   // model/table has no cost column (see data/db/tables.dart), so this
   // value is not persisted locally — same limitation as before, where
@@ -48,6 +60,10 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
   String _selectedCategory = 'General';
   String? _errorText;
   bool _saving = false;
+=======
+  late final TextEditingController _stockController;
+  String? _errorText;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   @override
   void initState() {
@@ -59,12 +75,17 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
         TextEditingController(text: widget.product?.description ?? '');
     _priceController = TextEditingController(
         text: widget.product?.price.toStringAsFixed(2) ?? '0.00');
+<<<<<<< HEAD
     _costController = TextEditingController(text: '0');
     _stockController =
         TextEditingController(text: widget.product?.stockQty.toString() ?? '0');
     _customCategoryController = TextEditingController(text: '');
     _imagePathController =
         TextEditingController(text: widget.product?.imagePath ?? '');
+=======
+    _stockController =
+        TextEditingController(text: widget.product?.stockQty.toString() ?? '0');
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   }
 
   @override
@@ -73,10 +94,14 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
+<<<<<<< HEAD
     _costController.dispose();
     _stockController.dispose();
     _customCategoryController.dispose();
     _imagePathController.dispose();
+=======
+    _stockController.dispose();
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     super.dispose();
   }
 
@@ -87,10 +112,14 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     final name = _nameController.text.trim();
     final description = _descriptionController.text.trim();
     final price = double.tryParse(_priceController.text.trim());
+<<<<<<< HEAD
     final cost = double.tryParse(_costController.text.trim()) ?? 0;
     final stockQty = int.tryParse(_stockController.text.trim());
     final customCategoryName = _customCategoryController.text.trim();
     final imagePath = _imagePathController.text.trim();
+=======
+    final stockQty = int.tryParse(_stockController.text.trim());
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
     if (price == null || price < 0) {
       setState(() => _errorText = 'Enter a valid price.');
@@ -100,6 +129,7 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
       setState(() => _errorText = 'Enter a valid stock quantity.');
       return;
     }
+<<<<<<< HEAD
     if (_selectedCategory == _customCategoryValue &&
         customCategoryName.isEmpty) {
       setState(
@@ -110,6 +140,8 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     final categoryName = _selectedCategory == _customCategoryValue
         ? customCategoryName
         : _selectedCategory;
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
     final db = ref.read(databaseProvider);
     final existing = await db.productDao.getProductByBarcode(barcode);
@@ -119,6 +151,7 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
       return;
     }
 
+<<<<<<< HEAD
     setState(() => _saving = true);
 
     final isEditing = widget.product != null;
@@ -126,6 +159,9 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     // desktop assigns a real one and the sync flush below replaces it.
     final id = widget.product?.id ?? -DateTime.now().millisecondsSinceEpoch;
 
+=======
+    final id = widget.product?.id ?? -DateTime.now().millisecondsSinceEpoch;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     await db.productDao.upsertProduct(
       ProductsCompanion(
         id: drift.Value(id),
@@ -138,6 +174,7 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
       ),
     );
 
+<<<<<<< HEAD
     // Enqueue the create/update so SyncService pushes it to the
     // desktop as soon as the WebSocket is connected — previously
     // nothing enqueued this at all, so products added on the phone
@@ -173,6 +210,9 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
 
     if (!mounted) return;
     setState(() => _saving = false);
+=======
+    if (!mounted) return;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     Navigator.of(context).pop();
   }
 
@@ -183,6 +223,7 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete product'),
+<<<<<<< HEAD
         content: const Text(
           'Remove this product from local inventory?\n\n'
           'Note: the desktop server currently has no delete/deactivate '
@@ -190,6 +231,9 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
           'phone\'s cache — it will reappear after the next sync unless '
           'it\'s also removed on the desktop.',
         ),
+=======
+        content: const Text('Remove this product from local inventory?'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
         actions: [
           TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -210,6 +254,7 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
     Navigator.of(context).pop();
   }
 
+<<<<<<< HEAD
   // Real image picker: lets staff choose from the gallery or snap a
   // photo with the camera. Requires the `image_picker` dependency —
   // see the pubspec.yaml note that ships alongside this file.
@@ -291,11 +336,24 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
           if (isEditing)
             IconButton(
               tooltip: 'Delete product',
+=======
+  @override
+  Widget build(BuildContext context) {
+    final isEditing = widget.product != null;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(isEditing ? 'Edit Product' : 'Add Product'),
+        actions: [
+          if (isEditing)
+            IconButton(
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
               icon: const Icon(Icons.delete_outline),
               onPressed: _deleteProduct,
             ),
         ],
       ),
+<<<<<<< HEAD
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -316,10 +374,23 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
               ],
             ),
             child: Form(
+=======
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (_errorText != null) ...[
+              Text(_errorText!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 12),
+            ],
+            Form(
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+<<<<<<< HEAD
                   if (_errorText != null) ...[
                     _buildErrorBanner(theme),
                     const SizedBox(height: 14),
@@ -397,10 +468,16 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
                   TextFormField(
                     controller: _barcodeController,
                     decoration: _fieldDecoration(theme),
+=======
+                  TextFormField(
+                    controller: _barcodeController,
+                    decoration: const InputDecoration(labelText: 'Barcode'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                     validator: (value) => value?.trim().isEmpty == true
                         ? 'Barcode is required.'
                         : null,
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 16),
 
                   // --- Price / Cost side by side, like the desktop dialog ---
@@ -566,15 +643,60 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall
                         ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+=======
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    validator: (value) => value?.trim().isEmpty == true
+                        ? 'Product name is required.'
+                        : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _descriptionController,
+                    decoration: const InputDecoration(labelText: 'Description'),
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _priceController,
+                    decoration: const InputDecoration(
+                        labelText: 'Price', prefixText: '៛'),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _stockController,
+                    decoration:
+                        const InputDecoration(labelText: 'Stock quantity'),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _saveProduct,
+                    child: Text(isEditing ? 'Save Changes' : 'Create Product'),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Changes are stored locally in the mobile cache. Synchronization with the desktop backend will be added in a later phase.',
+                    style: TextStyle(color: Colors.grey),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                   ),
                 ],
               ),
             ),
+<<<<<<< HEAD
           ),
+=======
+          ],
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
         ),
       ),
     );
   }
+<<<<<<< HEAD
 
   Widget _fieldLabel(ThemeData theme, String text) {
     return Padding(
@@ -634,4 +756,6 @@ class _InventoryEditorScreenState extends ConsumerState<InventoryEditorScreen> {
       ),
     );
   }
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 }

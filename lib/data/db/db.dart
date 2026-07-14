@@ -41,7 +41,11 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   /// Used by unit tests to run fully in-memory, with no file I/O.
+<<<<<<< HEAD
   AppDatabase.forTesting(super.executor);
+=======
+  AppDatabase.forTesting(QueryExecutor executor) : super(executor);
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   @override
   int get schemaVersion => 1;

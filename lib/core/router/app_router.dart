@@ -26,6 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final pairing = ref.read(pairingStatusProvider);
       final session = ref.read(sessionStatusProvider);
       final current = state.matchedLocation;
+<<<<<<< HEAD
       final isDebugRoute = current == '/debug';
       final isScanRoute = current == '/onboarding/scan';
 
@@ -34,6 +35,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isDebugRoute || isScanRoute) {
         return null;
       }
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
       if (pairing.isLoading || session.isLoading) {
         return current == '/splash' ? null : '/splash';

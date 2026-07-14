@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pos_mobile/data/db/database_provider.dart';
 import 'package:pos_mobile/data/db/db.dart';
+<<<<<<< HEAD
 import 'package:pos_mobile/data/db/shop_profile_providers.dart';
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import 'package:pos_mobile/features/inventory/inventory_editor_screen.dart';
 
 final inventorySearchQueryProvider = StateProvider<String>((ref) => '');
@@ -20,7 +23,10 @@ class InventoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchQuery = ref.watch(inventorySearchQueryProvider);
     final productsAsync = ref.watch(inventoryProductsProvider(searchQuery));
+<<<<<<< HEAD
     final currency = ref.watch(shopCurrencyProvider);
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
     return Scaffold(
       appBar: AppBar(
@@ -44,12 +50,21 @@ class InventoryScreen extends ConsumerWidget {
             child: productsAsync.when(
               data: (products) {
                 if (products.isEmpty) {
+<<<<<<< HEAD
                   return const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+=======
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                           Icon(Icons.inventory_2_outlined,
                               size: 72, color: Colors.grey),
                           SizedBox(height: 16),
@@ -77,8 +92,12 @@ class InventoryScreen extends ConsumerWidget {
                       leading: _buildProductImage(product),
                       title: Text(product.name),
                       subtitle: Text(
+<<<<<<< HEAD
                           // image should be displayed in the leading, so we can show more info in the subtitle
                           'Barcode: ${product.barcode}\nStock: ${product.stockQty} • Price: $currency${product.price.toStringAsFixed(2)}'),
+=======
+                          'Barcode: ${product.barcode}\nStock: ${product.stockQty} • Price: ៛${product.price.toStringAsFixed(2)}'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                       isThreeLine: true,
                       trailing: IconButton(
                         icon: const Icon(Icons.edit_outlined),

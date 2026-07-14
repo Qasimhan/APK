@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:pos_mobile/data/db/shop_profile_providers.dart';
 
 class CheckoutResultScreen extends ConsumerWidget {
+=======
+
+class CheckoutResultScreen extends StatelessWidget {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   const CheckoutResultScreen({
     super.key,
     required this.saleId,
@@ -14,9 +19,13 @@ class CheckoutResultScreen extends ConsumerWidget {
   final double change;
 
   @override
+<<<<<<< HEAD
   Widget build(BuildContext context, WidgetRef ref) {
     final currency = ref.watch(shopCurrencyProvider);
 
+=======
+  Widget build(BuildContext context) {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     return Scaffold(
       appBar: AppBar(title: const Text('Sale Complete')),
       body: Padding(
@@ -28,6 +37,7 @@ class CheckoutResultScreen extends ConsumerWidget {
             const Icon(Icons.check_circle_outline,
                 size: 84, color: Colors.green),
             const SizedBox(height: 24),
+<<<<<<< HEAD
             const Text(
               'Sale recorded locally!',
               textAlign: TextAlign.center,
@@ -40,6 +50,16 @@ class CheckoutResultScreen extends ConsumerWidget {
               'Change due: $currency${change.toStringAsFixed(2)}',
               textAlign: TextAlign.center,
             ),
+=======
+            const Text('Sale recorded locally!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            Text('Sale ID: $saleId', textAlign: TextAlign.center),
+            const SizedBox(height: 16),
+            Text('Change due: ${change.toStringAsFixed(2)}',
+                textAlign: TextAlign.center),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () =>

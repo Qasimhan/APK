@@ -91,9 +91,14 @@ class _DebugStatusScreenState extends ConsumerState<DebugStatusScreen> {
             FutureBuilder<String?>(
               future: SecureDeviceStorage.readDeviceToken(),
               builder: (context, snap) {
+<<<<<<< HEAD
                 if (snap.connectionState != ConnectionState.done) {
                   return const Text('Device token: checking...');
                 }
+=======
+                if (snap.connectionState != ConnectionState.done)
+                  return const Text('Device token: checking...');
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                 final token = snap.data;
                 return Text(
                     'Device token: ${token == null ? 'not stored' : '${token.substring(0, token.length > 8 ? 8 : token.length)}...'}');
@@ -102,9 +107,14 @@ class _DebugStatusScreenState extends ConsumerState<DebugStatusScreen> {
             FutureBuilder<String?>(
               future: SecureDeviceStorage.readSessionToken(),
               builder: (context, snap) {
+<<<<<<< HEAD
                 if (snap.connectionState != ConnectionState.done) {
                   return const Text('Session token: checking...');
                 }
+=======
+                if (snap.connectionState != ConnectionState.done)
+                  return const Text('Session token: checking...');
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                 final token = snap.data;
                 return Text(
                     'Session token: ${token == null ? 'not stored' : '${token.substring(0, token.length > 8 ? 8 : token.length)}...'}');
@@ -140,9 +150,14 @@ class _DebugStatusScreenState extends ConsumerState<DebugStatusScreen> {
             const SizedBox(height: 8),
             sessionAsync.when(
               data: (session) {
+<<<<<<< HEAD
                 if (session == null) {
                   return const Text('No active session (logged out)');
                 }
+=======
+                if (session == null)
+                  return const Text('No active session (logged out)');
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -161,7 +176,11 @@ class _DebugStatusScreenState extends ConsumerState<DebugStatusScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     await _doRefresh();
+<<<<<<< HEAD
                     if (!context.mounted) return;
+=======
+                    if (!mounted) return;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(_lastSyncMessage ?? 'Done')));
                   },
@@ -173,7 +192,11 @@ class _DebugStatusScreenState extends ConsumerState<DebugStatusScreen> {
                     // Clear stored tokens for quick testing
                     await SecureDeviceStorage.clearSessionToken();
                     await SecureDeviceStorage.clearDeviceToken();
+<<<<<<< HEAD
                     if (!context.mounted) return;
+=======
+                    if (!mounted) return;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Cleared stored tokens')));
                     setState(() {});

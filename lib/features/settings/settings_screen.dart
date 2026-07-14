@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/network/auth_state.dart';
+<<<<<<< HEAD
 import '../../core/scan/scan_feedback_provider.dart';
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import '../../core/theme/theme_mode_provider.dart';
 import '../../data/db/database_provider.dart';
 import '../../core/network/secure_device_storage.dart';
@@ -15,7 +18,10 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionAsync = ref.watch(sessionStatusProvider);
     final themeAsync = ref.watch(themeModeProvider);
+<<<<<<< HEAD
     final scanFeedbackAsync = ref.watch(scanFeedbackProvider);
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -44,6 +50,7 @@ class SettingsScreen extends ConsumerWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           themeAsync.when(
+<<<<<<< HEAD
             data: (mode) => SegmentedButton<ThemeMode>(
               segments: const [
                 ButtonSegment(
@@ -65,11 +72,41 @@ class SettingsScreen extends ConsumerWidget {
               selected: {mode},
               onSelectionChanged: (selection) =>
                   ref.read(themeModeProvider.notifier).setMode(selection.first),
+=======
+            data: (mode) => Column(
+              children: [
+                RadioListTile<ThemeMode>(
+                  title: const Text('Light'),
+                  value: ThemeMode.light,
+                  groupValue: mode,
+                  onChanged: (v) => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(v ?? ThemeMode.system),
+                ),
+                RadioListTile<ThemeMode>(
+                  title: const Text('Dark'),
+                  value: ThemeMode.dark,
+                  groupValue: mode,
+                  onChanged: (v) => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(v ?? ThemeMode.system),
+                ),
+                RadioListTile<ThemeMode>(
+                  title: const Text('System'),
+                  value: ThemeMode.system,
+                  groupValue: mode,
+                  onChanged: (v) => ref
+                      .read(themeModeProvider.notifier)
+                      .setMode(v ?? ThemeMode.system),
+                ),
+              ],
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
             ),
             loading: () => const Text('Loading appearance'),
             error: (_, __) => const Text('Error loading appearance'),
           ),
           const SizedBox(height: 24),
+<<<<<<< HEAD
           const Text('Scan Feedback',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
@@ -103,6 +140,8 @@ class SettingsScreen extends ConsumerWidget {
                 const Text('Error loading scan feedback settings'),
           ),
           const SizedBox(height: 24),
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           const Text('Account',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),

@@ -48,6 +48,7 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
         .toList();
   }
 
+<<<<<<< HEAD
   void incrementQuantity(int productId) {
     final item = state.firstWhere((item) => item.product.id == productId);
     updateQuantity(productId, item.quantity + 1);
@@ -58,6 +59,8 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
     updateQuantity(productId, item.quantity - 1);
   }
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   void removeProduct(int productId) {
     state = state.where((item) => item.product.id != productId).toList();
   }

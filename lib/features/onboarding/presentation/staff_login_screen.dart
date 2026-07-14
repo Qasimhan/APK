@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/network/api_client.dart';
+<<<<<<< HEAD
 import '../../../core/network/secure_device_storage.dart';
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import '../../../data/db/database_provider.dart';
 import '../../../data/db/db.dart';
 import '../application/login_controller.dart';
@@ -26,6 +29,7 @@ class StaffLoginScreen extends ConsumerWidget {
         title: const Text('Who\'s checking out?'),
         actions: [
           IconButton(
+<<<<<<< HEAD
             tooltip: 'Logout',
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -35,6 +39,11 @@ class StaffLoginScreen extends ConsumerWidget {
                 context.go('/presentation/welcome_screen');
               }
             },
+=======
+            tooltip: 'Debug',
+            icon: const Icon(Icons.bug_report),
+            onPressed: () => context.push('/debug'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           ),
         ],
       ),

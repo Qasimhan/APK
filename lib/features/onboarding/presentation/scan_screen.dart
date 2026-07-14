@@ -1,10 +1,18 @@
+<<<<<<< HEAD
+=======
+import 'dart:convert';
+
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../core/network/api_client.dart';
+<<<<<<< HEAD
 import '../../../core/scan/scan_feedback_provider.dart';
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import '../application/pairing_controller.dart';
 import '../data/onboarding_repository.dart';
 
@@ -16,12 +24,17 @@ class ScanScreen extends ConsumerStatefulWidget {
 }
 
 class _ScanScreenState extends ConsumerState<ScanScreen> {
+<<<<<<< HEAD
   final _controller = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
     formats: const [BarcodeFormat.qrCode],
   );
   bool _handledOneCode = false;
   bool _pairingAttemptStarted = false;
+=======
+  final _controller = MobileScannerController();
+  bool _handledOneCode = false;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   @override
   void dispose() {
@@ -36,16 +49,25 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
 
     PairingQrPayload payload;
     try {
+<<<<<<< HEAD
       payload = PairingQrPayload.fromRaw(raw);
+=======
+      payload = PairingQrPayload.fromJson(
+        jsonDecode(raw) as Map<String, dynamic>,
+      );
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     } catch (_) {
       // Not a pairing QR (or malformed) — keep scanning silently rather
       // than interrupting with an error for every stray code in frame.
       return;
     }
 
+<<<<<<< HEAD
     ref.read(scanFeedbackProvider.future).then(playScanFeedback);
 
     _pairingAttemptStarted = true;
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     setState(() => _handledOneCode = true);
     ref.read(pairingControllerProvider.notifier).pairFromQr(payload);
   }
@@ -55,8 +77,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
     ref.listen(pairingControllerProvider, (previous, next) {
       next.whenOrNull(
         data: (_) {
+<<<<<<< HEAD
           if (_pairingAttemptStarted && previous?.isLoading == true) {
             _pairingAttemptStarted = false;
+=======
+          if (previous?.isLoading == true) {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
             context.go('/onboarding/login');
           }
         },
@@ -67,7 +93,10 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(message)),
           );
+<<<<<<< HEAD
           _pairingAttemptStarted = false;
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           setState(() => _handledOneCode = false);
         },
       );

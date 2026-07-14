@@ -1,4 +1,9 @@
 import 'dart:io';
+<<<<<<< HEAD
+=======
+// ignore: unused_import
+import 'dart:convert';
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:dio/dio.dart';
@@ -6,6 +11,7 @@ import 'package:dio/io.dart';
 
 /// Thin wrapper around the PC's local REST API.
 ///
+<<<<<<< HEAD
 /// This contract is taken directly from `MOBILE_API_REFERENCE.md`
 /// (verified against the desktop server source) — every path, field
 /// name, and header below is confirmed, not guessed.
@@ -15,12 +21,27 @@ class PosApiClient {
   /// HTTPS with a self-signed cert, so this should always be `true`
   /// in practice. If `trustedFingerprint` is provided, the
   /// certificate's SHA256 fingerprint must match it.
+=======
+/// Endpoint paths/shapes here are the mobile side's assumption of the
+/// contract exposed by the desktop app's local server (built in
+/// Desktop Phases 5–7). If the actual desktop API differs, only this
+/// file and [PosApiException] call sites need to change — nothing else
+/// in the onboarding feature talks to Dio directly.
+class PosApiClient {
+  /// `allowSelfSigned` enables contacting a PC using a self-signed
+  /// certificate on the local network. If `trustedFingerprint` is
+  /// provided, the certificate's SHA256 fingerprint must match it.
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   PosApiClient({
     required String ip,
     required int port,
     String? deviceToken,
     String? sessionToken,
+<<<<<<< HEAD
     bool allowSelfSigned = true,
+=======
+    bool allowSelfSigned = false,
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     String? trustedFingerprint,
   }) : _dio = Dio(
           BaseOptions(
@@ -28,6 +49,7 @@ class PosApiClient {
             connectTimeout: const Duration(seconds: 8),
             receiveTimeout: const Duration(seconds: 8),
             headers: {
+<<<<<<< HEAD
               // Device token proves this phone is paired at all.
               if (deviceToken != null) 'Authorization': 'Bearer $deviceToken',
               // Session token proves a specific staff member is logged
@@ -36,16 +58,28 @@ class PosApiClient {
               // on why callers should build a fresh client (or at
               // least a fresh session token) per request rather than
               // holding one client long-term.
+=======
+              if (deviceToken != null) 'Authorization': 'Bearer $deviceToken',
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
               if (sessionToken != null) 'X-Session-Token': sessionToken,
             },
           ),
         ) {
+<<<<<<< HEAD
     if (allowSelfSigned) {
       final adapter = _dio.httpClientAdapter as IOHttpClientAdapter;
       // dio 5.x: `onHttpClientCreate` is deprecated in favor of
       // `createHttpClient`.
       adapter.createHttpClient = () {
         final client = HttpClient();
+=======
+    // Configure HttpClient to accept self-signed certificates when
+    // requested. We use IOHttpClientAdapter to gain access to the
+    // underlying HttpClient and its badCertificateCallback.
+    if (allowSelfSigned) {
+      final adapter = _dio.httpClientAdapter as IOHttpClientAdapter;
+      adapter.onHttpClientCreate = (HttpClient client) {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
         client.badCertificateCallback =
             (X509Certificate cert, String host, int port) {
           if (trustedFingerprint != null && trustedFingerprint.isNotEmpty) {
@@ -57,6 +91,10 @@ class PosApiClient {
               return false;
             }
           }
+<<<<<<< HEAD
+=======
+          // If no trusted fingerprint supplied, accept any cert.
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           return true;
         };
         return client;
@@ -66,6 +104,7 @@ class PosApiClient {
 
   final Dio _dio;
 
+<<<<<<< HEAD
   /// `POST /pair` — public, no auth. Exchanges the QR code's
   /// short-lived pairing token for a long-lived device token.
   Future<String> exchangePairingToken(String pairingToken) async {
@@ -75,6 +114,20 @@ class PosApiClient {
           (res.data as Map<String, dynamic>)['device_token'] as String?;
       if (deviceToken == null || deviceToken.isEmpty) {
         throw const PosApiException('Pairing response missing device_token.');
+=======
+  /// Step 1 of pairing: exchange the short-lived QR pairing token for a
+  /// longer-lived device token the phone will use on every future
+  /// request.
+  Future<String> exchangePairingToken(String pairingToken) async {
+    try {
+      final res = await _dio.post(
+        '/pairing/exchange',
+        data: {'pairing_token': pairingToken},
+      );
+      final deviceToken = res.data['device_token'] as String?;
+      if (deviceToken == null) {
+        throw const PosApiException('Pairing response missing device_token');
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       }
       return deviceToken;
     } on DioException catch (e) {
@@ -82,6 +135,7 @@ class PosApiClient {
     }
   }
 
+<<<<<<< HEAD
   /// `GET /health` — public, no auth.
   Future<bool> checkHealth() async {
     try {
@@ -97,12 +151,23 @@ class PosApiClient {
   Future<InitialSyncPayload> fetchInitialSync() async {
     try {
       final res = await _dio.get('/sync/initial');
+=======
+  /// Step 2 of pairing: pull the shop profile, full product catalog,
+  /// and staff list in one shot, right after a device token is issued.
+  Future<InitialSyncPayload> fetchInitialSync(String deviceToken) async {
+    try {
+      final res = await _dio.get(
+        '/sync/initial',
+        options: Options(headers: {'Authorization': 'Bearer $deviceToken'}),
+      );
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       return InitialSyncPayload.fromJson(res.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw PosApiException.fromDio(e, context: 'initial sync');
     }
   }
 
+<<<<<<< HEAD
   /// `GET /staff` — device token only. Only active staff; never
   /// includes PINs. Use this for the staff picker list.
   Future<List<Map<String, dynamic>>> fetchStaffList() async {
@@ -132,10 +197,22 @@ class PosApiClient {
       return (res.data as Map<String, dynamic>);
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) return null;
+=======
+  /// Looks up a single product on the PC by barcode. Returns the raw
+  /// product JSON map or null if not found.
+  Future<Map<String, dynamic>?> fetchProductByBarcode(String barcode) async {
+    try {
+      final res = await _dio
+          .get('/products/lookup', queryParameters: {'barcode': barcode});
+      if (res.statusCode == 404) return null;
+      return (res.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       throw PosApiException.fromDio(e, context: 'fetch product');
     }
   }
 
+<<<<<<< HEAD
   /// `POST /sales` — device token + session token (Cashier+). The
   /// cashier is always taken server-side from the session token — a
   /// staff_id/cashier_id in the body is ignored even if sent.
@@ -149,11 +226,27 @@ class PosApiClient {
     try {
       final res = await _dio.post('/sales', data: payload);
       return (res.data as Map<String, dynamic>)['sale_id'] as int;
+=======
+  /// Pushes a completed sale to the PC. The `payload` should contain
+  /// an idempotency key (client-generated sale id) so the PC can
+  /// deduplicate retries.
+  Future<void> pushSale(Map<String, dynamic> payload) async {
+    try {
+      // If the client has provided an idempotency key (sale_id), send it
+      // as an Idempotency-Key header so the server can deduplicate retries.
+      final headers = <String, dynamic>{};
+      if (payload.containsKey('sale_id')) {
+        headers['Idempotency-Key'] = payload['sale_id'];
+      }
+      await _dio.post('/sales',
+          data: payload, options: Options(headers: headers));
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     } on DioException catch (e) {
       throw PosApiException.fromDio(e, context: 'push sale');
     }
   }
 
+<<<<<<< HEAD
   Future<Map<String, dynamic>> voidSale(int saleId) async {
     try {
       final res = await _dio.post('/sales/$saleId/void');
@@ -174,12 +267,19 @@ class PosApiClient {
     try {
       final res =
           await _dio.post('/products', data: _toProductWireBody(localPayload));
+=======
+  Future<Map<String, dynamic>> createProduct(
+      Map<String, dynamic> payload) async {
+    try {
+      final res = await _dio.post('/products', data: payload);
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       return (res.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw PosApiException.fromDio(e, context: 'create product');
     }
   }
 
+<<<<<<< HEAD
   /// `PUT /products/{id}` — device token + session token (Manager+).
   /// Full-record replace, same body/response shape as create.
   Future<Map<String, dynamic>> updateProduct(
@@ -187,12 +287,19 @@ class PosApiClient {
     try {
       final res = await _dio.put('/products/$id',
           data: _toProductWireBody(localPayload));
+=======
+  Future<Map<String, dynamic>> updateProduct(
+      int id, Map<String, dynamic> payload) async {
+    try {
+      final res = await _dio.put('/products/$id', data: payload);
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       return (res.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw PosApiException.fromDio(e, context: 'update product');
     }
   }
 
+<<<<<<< HEAD
   /// `PATCH /products/{id}/stock` — device token + session token
   /// (Manager+). Delta-based (negative to sell/void, positive to
   /// restock) — NOT a general product editor, use [updateProduct] for
@@ -233,6 +340,18 @@ class PosApiClient {
   /// the confirmed `MOBILE_API_REFERENCE.md` contract — the desktop
   /// team hasn't documented an images endpoint yet. Left in place for
   /// when/if that's added; don't rely on this until confirmed.
+=======
+  Future<void> deactivateProduct(int id) async {
+    try {
+      await _dio.delete('/products/$id');
+    } on DioException catch (e) {
+      throw PosApiException.fromDio(e, context: 'delete product');
+    }
+  }
+
+  /// Uploads an image file as multipart form data and returns the
+  /// server's image id / metadata.
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   Future<Map<String, dynamic>> uploadImage(File file) async {
     try {
       final name = file.path.split(Platform.pathSeparator).last;
@@ -247,12 +366,20 @@ class PosApiClient {
     }
   }
 
+<<<<<<< HEAD
   /// `GET /products/{id}/image` — device token only. Server falls
   /// back to a bundled placeholder if there's no image, so no local
   /// fallback logic is needed here.
   Future<List<int>> downloadProductImage(int productId) async {
     try {
       final res = await _dio.get('/products/$productId/image',
+=======
+  /// Downloads an image bytes by id. Caller is responsible for writing
+  /// bytes to disk if needed.
+  Future<List<int>> downloadImage(String imageId) async {
+    try {
+      final res = await _dio.get('/images/$imageId',
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           options: Options(responseType: ResponseType.bytes));
       return (res.data as List<int>);
     } on DioException catch (e) {
@@ -260,6 +387,7 @@ class PosApiClient {
     }
   }
 
+<<<<<<< HEAD
   /// `POST /auth/login` — device token only. The staff PIN login.
   /// Response's `token` field is the SESSION token (not `session_token`
   /// — this key name previously caused every login to fail with
@@ -267,11 +395,20 @@ class PosApiClient {
   Future<StaffLoginResult> verifyStaffPin({
     required int staffId,
     required String pin,
+=======
+  /// Verifies a staff PIN server-side. The PIN itself is never checked
+  /// or stored on the device — only this network round trip decides.
+  Future<String> verifyStaffPin({
+    required int staffId,
+    required String pin,
+    required String deviceToken,
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   }) async {
     try {
       final res = await _dio.post(
         '/auth/login',
         data: {'staff_id': staffId, 'pin': pin},
+<<<<<<< HEAD
       );
       final data = res.data as Map<String, dynamic>;
       final sessionToken = data['token'] as String?;
@@ -285,6 +422,15 @@ class PosApiClient {
         role: data['role'] as String,
         expiresAt: data['expires_at'] as int?,
       );
+=======
+        options: Options(headers: {'Authorization': 'Bearer $deviceToken'}),
+      );
+      final sessionToken = res.data['session_token'] as String?;
+      if (sessionToken == null) {
+        throw const PosApiException('Login response missing session_token');
+      }
+      return sessionToken;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         throw const PosApiException('Incorrect PIN', isAuthError: true);
@@ -294,6 +440,7 @@ class PosApiClient {
   }
 }
 
+<<<<<<< HEAD
 class StaffLoginResult {
   final String sessionToken;
   final int userId;
@@ -313,20 +460,32 @@ class StaffLoginResult {
 class InitialSyncPayload {
   /// Null if the desktop hasn't completed first-run setup yet.
   final Map<String, dynamic>? shop;
+=======
+class InitialSyncPayload {
+  final Map<String, dynamic> shopProfile;
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   final List<Map<String, dynamic>> products;
   final List<Map<String, dynamic>> staff;
 
   InitialSyncPayload({
+<<<<<<< HEAD
     required this.shop,
+=======
+    required this.shopProfile,
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     required this.products,
     required this.staff,
   });
 
   factory InitialSyncPayload.fromJson(Map<String, dynamic> json) {
     return InitialSyncPayload(
+<<<<<<< HEAD
       // Server field is "shop", not "shop_profile" — and it can
       // legitimately be null pre-setup.
       shop: json['shop'] as Map<String, dynamic>?,
+=======
+      shopProfile: json['shop_profile'] as Map<String, dynamic>,
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       products: (json['products'] as List).cast<Map<String, dynamic>>(),
       staff: (json['staff'] as List).cast<Map<String, dynamic>>(),
     );
@@ -338,6 +497,7 @@ class PosApiException implements Exception {
   final bool isAuthError;
   final int? statusCode;
 
+<<<<<<< HEAD
   /// Populated only for `POST /sales` 409 responses — per-item
   /// shortfall details from the server's `items` array.
   final List<Map<String, dynamic>>? insufficientStockItems;
@@ -348,6 +508,10 @@ class PosApiException implements Exception {
     this.statusCode,
     this.insufficientStockItems,
   });
+=======
+  const PosApiException(this.message,
+      {this.isAuthError = false, this.statusCode});
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   factory PosApiException.fromDio(DioException e, {required String context}) {
     if (e.type == DioExceptionType.connectionTimeout ||
@@ -359,6 +523,7 @@ class PosApiException implements Exception {
       );
     }
 
+<<<<<<< HEAD
     if (e.type == DioExceptionType.badCertificate) {
       return PosApiException(
         'Couldn\'t verify the shop computer\'s security certificate '
@@ -428,12 +593,23 @@ class PosApiException implements Exception {
         '$serverMessage (during $context, status: ${code ?? 'unknown'})',
         statusCode: code,
       );
+=======
+    final code = e.response?.statusCode;
+    if (code == 401) {
+      return PosApiException('Authentication failed during $context.',
+          isAuthError: true, statusCode: code);
+    }
+    if (code == 409) {
+      return PosApiException('Conflict (409) from server during $context.',
+          statusCode: code);
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     }
 
     return PosApiException('Something went wrong during $context.',
         statusCode: code);
   }
 
+<<<<<<< HEAD
   static String? _extractServerMessage(dynamic data) {
     if (data is Map<String, dynamic>) {
       for (final key in const ['error', 'message', 'detail', 'details']) {
@@ -449,6 +625,8 @@ class PosApiException implements Exception {
     return null;
   }
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   @override
   String toString() => message;
 }

@@ -131,4 +131,7 @@ error, not just a warning.
 Barcode scanning & lookup — reuses `mobile_scanner` (already wired for
 QR pairing) and `ProductDao.getProductByBarcode` (already built in
 Phase 2) for the actual checkout scan flow.
+<<<<<<< HEAD
+=======
 "# APK" 
+>>>>>>> d3e7b9ab563d45e0df12e7e265596b54c256a9f1

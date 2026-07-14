@@ -1,13 +1,21 @@
+<<<<<<< HEAD
 import 'dart:async';
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 
 import 'package:pos_mobile/data/db/database_provider.dart';
+<<<<<<< HEAD
 import 'package:pos_mobile/data/db/shop_profile_providers.dart';
 import 'package:pos_mobile/features/pos/cart_controller.dart';
 import 'package:pos_mobile/features/pos/checkout_result_screen.dart';
 import 'package:pos_mobile/features/sync/sync_providers.dart';
+=======
+import 'package:pos_mobile/features/pos/cart_controller.dart';
+import 'package:pos_mobile/features/pos/checkout_result_screen.dart';
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
@@ -31,6 +39,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cartItems = ref.watch(cartProvider);
     final total = ref.watch(cartTotalProvider);
+<<<<<<< HEAD
     final currency = ref.watch(shopCurrencyProvider);
     final theme = Theme.of(context);
 
@@ -76,11 +85,51 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     _buildConfirmButton(theme, items: cartItems, total: total),
                   ],
                 ),
+=======
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Checkout')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: cartItems.isEmpty
+            ? const Center(child: Text('Your cart is empty.'))
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSummary(total),
+                  const SizedBox(height: 16),
+                  _buildPaymentMethod(),
+                  if (_paymentMethod == 'cash') ...[
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _cashController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        labelText: 'Amount tendered',
+                        prefixText: '',
+                      ),
+                    ),
+                  ],
+                  if (_errorText != null) ...[
+                    const SizedBox(height: 12),
+                    Text(_errorText!,
+                        style: const TextStyle(color: Colors.red)),
+                  ],
+                  const SizedBox(height: 16),
+                  Expanded(child: _buildCartList(cartItems)),
+                  ElevatedButton(
+                    onPressed: () => _confirmCheckout(cartItems, total),
+                    child: const Text('Confirm Checkout'),
+                  ),
+                ],
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
               ),
       ),
     );
   }
 
+<<<<<<< HEAD
   Widget _buildEmptyState(ThemeData theme) {
     return Center(
       child: Column(
@@ -186,11 +235,39 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             selected: _paymentMethod == 'card',
             onSelected: () => setState(() => _paymentMethod = 'card'),
           ),
+=======
+  Widget _buildSummary(double total) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Total: ${total.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Text('Payment method: ${_paymentMethod.capitalize()}'),
+      ],
+    );
+  }
+
+  Widget _buildPaymentMethod() {
+    return Row(
+      children: [
+        ChoiceChip(
+          label: const Text('Cash'),
+          selected: _paymentMethod == 'cash',
+          onSelected: (_) => setState(() => _paymentMethod = 'cash'),
+        ),
+        const SizedBox(width: 10),
+        ChoiceChip(
+          label: const Text('Card'),
+          selected: _paymentMethod == 'card',
+          onSelected: (_) => setState(() => _paymentMethod = 'card'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
         ),
       ],
     );
   }
 
+<<<<<<< HEAD
   Widget _buildCashField(ThemeData theme, String currency) {
     return TextField(
       controller: _cashController,
@@ -257,11 +334,26 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           onIncrement: () => ref
               .read(cartProvider.notifier)
               .incrementQuantity(item.product.id),
+=======
+  Widget _buildCartList(List<CartItem> items) {
+    return ListView.separated(
+      itemCount: items.length,
+      separatorBuilder: (_, __) => const Divider(),
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return ListTile(
+          title: Text(item.product.name),
+          subtitle: Text(
+              'Qty ${item.quantity} • ${item.product.price.toStringAsFixed(2)} each'),
+          trailing: Text(
+              '${(item.product.price * item.quantity).toStringAsFixed(2)}'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
         );
       },
     );
   }
 
+<<<<<<< HEAD
   Widget _buildConfirmButton(
     ThemeData theme, {
     required List<CartItem> items,
@@ -287,6 +379,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
   }
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   Future<void> _confirmCheckout(List<CartItem> items, double total) async {
     setState(() => _errorText = null);
     if (items.isEmpty) return;
@@ -345,10 +439,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       // Swallow enqueue errors; sale is still recorded locally.
     }
 
+<<<<<<< HEAD
     // Push immediately rather than waiting for the next WebSocket
     // reconnect cycle — same reasoning as the inventory screen.
     unawaited(ref.read(syncServiceProvider).flushNow());
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     ref.read(cartProvider.notifier).clear();
     if (!mounted) return;
 
@@ -375,6 +472,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }
 }
 
+<<<<<<< HEAD
 /// A pill-shaped, icon-labeled payment method selector.
 class _PaymentOptionChip extends StatelessWidget {
   const _PaymentOptionChip({
@@ -646,6 +744,8 @@ class _StepperButton extends StatelessWidget {
   }
 }
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 extension on String {
   String capitalize() =>
       isEmpty ? this : '${this[0].toUpperCase()}${substring(1)}';

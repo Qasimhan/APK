@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 import 'scan_screen.dart';
+=======
+import 'package:go_router/go_router.dart';
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
 class InstructionsScreen extends StatelessWidget {
   const InstructionsScreen({super.key});
@@ -52,11 +56,15 @@ class InstructionsScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
+<<<<<<< HEAD
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const ScanScreen(),
                     ),
                   ),
+=======
+                  onPressed: () => context.go('/onboarding/scan'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: Text('Scan Now'),

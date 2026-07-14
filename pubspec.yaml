@@ -12,8 +12,11 @@ dependencies:
 
   # Navigation
   go_router: ^14.2.0
+<<<<<<< HEAD
   # Image picking (for product images)
   image_picker: ^1.1.2
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   # State management
   flutter_riverpod: ^2.5.1
@@ -32,7 +35,11 @@ dependencies:
   multicast_dns: ^0.3.2+6
 
   # Barcode / QR scanning (pairing QR + product barcodes)
+<<<<<<< HEAD
   mobile_scanner: ^7.2.0
+=======
+  mobile_scanner: ^5.1.1
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
   # Secure storage for device token / pairing secrets
   flutter_secure_storage: ^9.2.2
@@ -48,11 +55,14 @@ dev_dependencies:
   drift_dev: ^2.18.0
   build_runner: ^2.4.11
   flutter_lints: ^4.0.0
+<<<<<<< HEAD
   flutter_launcher_icons: ^0.14.4
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/app_icon.png"  
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
 flutter:
   uses-material-design: true

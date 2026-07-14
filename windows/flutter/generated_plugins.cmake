@@ -3,7 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+<<<<<<< HEAD
   file_selector_windows
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   flutter_secure_storage_windows
   sqlite3_flutter_libs
 )

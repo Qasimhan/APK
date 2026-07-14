@@ -2,12 +2,20 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pos_mobile/core/scan/scan_feedback_provider.dart';
 import 'package:pos_mobile/data/db/db.dart';
 import 'package:pos_mobile/data/db/database_provider.dart';
 import 'package:pos_mobile/data/db/shop_profile_providers.dart';
+=======
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:pos_mobile/data/db/db.dart';
+import 'package:pos_mobile/data/db/database_provider.dart';
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 import 'package:pos_mobile/features/sync/sync_providers.dart';
 import 'package:pos_mobile/features/pos/cart_controller.dart';
 import 'package:pos_mobile/features/pos/checkout_screen.dart';
@@ -20,9 +28,13 @@ class PosScreen extends ConsumerStatefulWidget {
 }
 
 class _PosScreenState extends ConsumerState<PosScreen> {
+<<<<<<< HEAD
   final _controller = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
   );
+=======
+  final _controller = MobileScannerController();
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   String? _lastBarcode;
   DateTime? _lastScanAt;
   Product? _scannedProduct;
@@ -51,9 +63,15 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     _lastBarcode = barcode;
     _lastScanAt = now;
 
+<<<<<<< HEAD
     try {
       final feedback = await ref.read(scanFeedbackProvider.future);
       await playScanFeedback(feedback);
+=======
+    HapticFeedback.lightImpact();
+    try {
+      await _playBeep();
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     } catch (_) {
       // ignore
     }
@@ -61,8 +79,11 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     final db = ref.read(databaseProvider);
     final product = await db.productDao.getProductByBarcode(barcode);
 
+<<<<<<< HEAD
     if (!mounted) return;
 
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     setState(() {
       _scannedProduct = product;
       _lookupMessage = product == null ? 'Product not found' : null;
@@ -76,7 +97,10 @@ class _PosScreenState extends ConsumerState<PosScreen> {
           ref
               .read(syncServiceProvider)
               .sendScanResult(_remoteScanSessionId!, barcode);
+<<<<<<< HEAD
           if (!mounted) return;
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Sent scan result to desktop')));
         } catch (_) {}
@@ -89,6 +113,13 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     }
   }
 
+<<<<<<< HEAD
+=======
+  Future<void> _playBeep() async {
+    await SystemSound.play(SystemSoundType.click);
+  }
+
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
   void _submitManualBarcode() {
     final barcode = _manualBarcodeController.text.trim();
     if (barcode.isEmpty) return;
@@ -99,7 +130,10 @@ class _PosScreenState extends ConsumerState<PosScreen> {
   Widget build(BuildContext context) {
     final cartItems = ref.watch(cartProvider);
     final cartCount = ref.watch(cartItemCountProvider);
+<<<<<<< HEAD
     final currency = ref.watch(shopCurrencyProvider);
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
 
     return Scaffold(
       appBar: AppBar(
@@ -112,6 +146,7 @@ class _PosScreenState extends ConsumerState<PosScreen> {
                 alignment: Alignment.topRight,
                 children: [
                   const Icon(Icons.shopping_cart_outlined),
+<<<<<<< HEAD
                   CircleAvatar(
                     radius: 8,
                     backgroundColor: cartCount > 0 ? Colors.red : Colors.grey,
@@ -120,6 +155,18 @@ class _PosScreenState extends ConsumerState<PosScreen> {
                       style: const TextStyle(fontSize: 10, color: Colors.white),
                     ),
                   ),
+=======
+                  if (cartCount > 0)
+                    CircleAvatar(
+                      radius: 8,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        cartCount.toString(),
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                    ),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                   // Pending sync badge (small orange dot with count)
                   pendingAsync.when(
                     data: (pending) => pending > 0
@@ -161,6 +208,7 @@ class _PosScreenState extends ConsumerState<PosScreen> {
             child: MobileScanner(
               controller: _controller,
               onDetect: (capture) {
+<<<<<<< HEAD
                 final barcode = capture.barcodes.firstOrNull?.rawValue;
                 if (barcode != null) {
                   _handleBarcode(barcode);
@@ -168,6 +216,11 @@ class _PosScreenState extends ConsumerState<PosScreen> {
                   setState(() {
                     _lookupMessage = 'Unsupported barcode format';
                   });
+=======
+                final barcode = capture.barcodes.first.rawValue;
+                if (barcode != null) {
+                  _handleBarcode(barcode);
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                 }
               },
             ),
@@ -194,7 +247,11 @@ class _PosScreenState extends ConsumerState<PosScreen> {
                       style: const TextStyle(color: Colors.red)),
                 if (_scannedProduct != null) ...[
                   const SizedBox(height: 12),
+<<<<<<< HEAD
                   _buildProductCard(_scannedProduct!, currency),
+=======
+                  _buildProductCard(_scannedProduct!),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                 ],
               ],
             ),
@@ -204,7 +261,11 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildProductCard(Product product, String currency) {
+=======
+  Widget _buildProductCard(Product product) {
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -222,7 +283,11 @@ class _PosScreenState extends ConsumerState<PosScreen> {
                   const SizedBox(height: 4),
                   Text(product.description ?? 'No description'),
                   const SizedBox(height: 8),
+<<<<<<< HEAD
                   Text('Price: $currency${product.price.toStringAsFixed(2)}'),
+=======
+                  Text('Price: ${product.price.toStringAsFixed(2)}'),
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
                   Text('Stock: ${product.stockQty}'),
                 ],
               ),
@@ -263,7 +328,10 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     // Listen for remote scan requests from the SyncService
     _remoteScanSub =
         ref.read(syncServiceProvider).scanRequestStream.listen((sessionId) {
+<<<<<<< HEAD
       if (!mounted) return;
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
       setState(() {
         _remoteScanActive = true;
         _remoteScanSessionId = sessionId;
@@ -273,7 +341,10 @@ class _PosScreenState extends ConsumerState<PosScreen> {
     });
   }
 }
+<<<<<<< HEAD
 
 extension _FirstOrNull<T> on List<T> {
   T? get firstOrNull => isEmpty ? null : first;
 }
+=======
+>>>>>>> d647790f179ea85ecb3c54e2a8ea3e8e98c11006
